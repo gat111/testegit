@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Validator.js 入力検証フォーム</title>
+    <!-- CDNを使ってValidator.jsを追加 -->
+    <script src="https://cdn.jsdelivr.net/npm/validator@13.7.0/validator.min.js"></script>
+    <style>
+      /* 基本スタイル */
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #eef2f3;
+        padding: 20px;
+      }
+      .form-container {
+        background-color: #fff;
+        padding: 30px;
+        border-radius: 8px;
+        max-width: 600px;
+        margin: auto;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+      .form-container h2 {
+        text-align: center;
+        margin-bottom: 25px;
+        color: #333;
+      }
+      .form-group {
+        margin-bottom: 20px;
+      }
+      .form-group label {
+        display: block;
+        margin-bottom: 6px;
+        font-weight: bold;
+        color: #555;
+      }
+      .form-group input {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+        font-size: 1em;
+      }
+      .error-message {
+        color: #e74c3c;
+        font-size: 0.9em;
+        margin-top: 5px;
+        display: none;
+      }
+      .success-message {
+        color: #27ae60;
+        font-size: 1em;
+        text-align: center;
+        margin-top: 20px;
+        display: none;
+      }
+      button {
+        width: 100%;
+        padding: 12px;
+        background-color: #3498db;
+        border: none;
+        color: white;
+        font-size: 1.1em;
+        cursor: pointer;
+        border-radius: 4px;
+        transition: background-color 0.3s ease;
+      }
+      button:hover {
+        background-color: #2980b9;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="form-container">
+      <h2>入力検証フォーム</h2>
+      <form id="validationForm" action="/submit-form" method="POST">
+        <!-- メールアドレス -->
+        <div class="form-group">
+          <label for="emailInput">メールアドレス:</label>
+          <input
+            type="text"
+            id="emailInput"
+            name="email"
+            placeholder="例: user@example.com"
+          />
+          <div class="error-message" id="emailError">
+            有効なメールアドレスを入力してください。
+          </div>
+        </div>
+        <!-- URL -->
+        <div class="form-group">
+          <label for="urlInput">URL:</label>
+          <input
+            type="text"
+            id="urlInput"
+            name="url"
+            placeholder="例: https://www.example.com"
+          />
+          <div class="error-message" id="urlError">
+            有効なURLを入力してください。
+          </div>
+        </div>
+        <!-- 数値（年齢） -->
+        <div class="form-group">
+          <label for="numberInput">年齢:</label>
+          <input type="text" id="numberInput" name="age" placeholder="例: 25" />
+          <div class="error-message" id="numberError">
+            数字のみを入力してください。
+          </div>
+        </div>
+        <!-- 電話番号 -->
+        <div class="form-group">
+          <label for="phoneInput">電話番号:</label>
+          <input
+            type="text"
+            id="phoneInput"
+            name="phone"
+            placeholder="例: 090-1234-5678"
+          />
+          <div class="error-message" id="phoneError">
+            有効な電話番号を入力してください。
+          </div>
+        </div>
+        <!-- IPアドレス -->
+        <div class="form-group">
+          <label for="ipInput">IPアドレス:</label>
+          <input
+            type="text"
+            id="ipInput"
+            name="ip"
+            placeholder="例: 192.168.1.1"
+          />
+          <div class="error-message" id="ipError">
+            有効なIPアドレスを入力してください。
+          </div>
+        </div>
+        <!-- 日付 -->
+        <div class="form-group">
+          <label for="dateInput">日付:</label>
+          <input
+            type="text"
+            id="dateInput"
+            name="date"
+            placeholder="例: 2024-04-27"
+          />
+          <div class="error-message" id="dateError">
+            有効な日付を入力してください。
+          </div>
+        </div>
+        <!-- アルファベットのみ -->
+        <div class="form-group">
+          <label for="alphaInput">アルファベットのみ:</label>
+          <input
+            type="text"
+            id="alphaInput"
+            name="alpha"
+            placeholder="例: HelloWorld"
+          />
+          <div class="error-message" id="alphaError">
+            アルファベットのみを入力してください。
+          </div>
+        </div>
+        <!-- 英数字のみ -->
+        <div class="form-group">
+          <label for="alphanumInput">英数字のみ:</label>
+          <input
+            type="text"
+            id="alphanumInput"
+            name="alphanum"
+            placeholder="例: User1234"
+          />
+          <div class="error-message" id="alphanumError">
+            英数字のみを入力してください。
+          </div>
+        </div>
+        <!-- 文字数制限（ユーザー名） -->
+        <div class="form-group">
+          <label for="lengthInput">ユーザー名 (5～10文字):</label>
+          <input
+            type="text"
+            id="lengthInput"
+            name="username"
+            placeholder="例: JohnDoe"
+          />
+          <div class="error-message" id="lengthError">
+            5～10文字で入力してください。
+          </div>
+        </div>
+        <!-- パスワードと確認 -->
+        <div class="form-group">
+          <label for="passwordInput">パスワード:</label>
+          <input
+            type="password"
+            id="passwordInput"
+            name="password"
+            placeholder="パスワードを入力してください"
+          />
+        </div>
+        <div class="form-group">
+          <label for="confirmPasswordInput">パスワード確認:</label>
+          <input
+            type="password"
+            id="confirmPasswordInput"
+            name="confirm_password"
+            placeholder="パスワードを再入力してください"
+          />
+          <div class="error-message" id="passwordError">
+            パスワードが一致しません。
+          </div>
+        </div>
+        <button type="submit">送信</button>
+        <div class="success-message" id="successMessage">
+          すべての入力が有効です！
+        </div>
+      </form>
+    </div>
+
+    <script>
+      document
+        .getElementById("validationForm")
+        .addEventListener("submit", function (event) {
+          // 入力値を取得
+          const email = document.getElementById("emailInput").value;
+          const url = document.getElementById("urlInput").value;
+          const number = document.getElementById("numberInput").value;
+          const phone = document.getElementById("phoneInput").value;
+          const ip = document.getElementById("ipInput").value;
+          const date = document.getElementById("dateInput").value;
+          const alpha = document.getElementById("alphaInput").value;
+          const alphanum = document.getElementById("alphanumInput").value;
+          const length = document.getElementById("lengthInput").value;
+          const password = document.getElementById("passwordInput").value;
+          const confirmPassword = document.getElementById(
+            "confirmPasswordInput"
+          ).value;
+
+          // エラーメッセージ要素を取得
+          const emailError = document.getElementById("emailError");
+          const urlError = document.getElementById("urlError");
+          const numberError = document.getElementById("numberError");
+          const phoneError = document.getElementById("phoneError");
+          const ipError = document.getElementById("ipError");
+          const dateError = document.getElementById("dateError");
+          const alphaError = document.getElementById("alphaError");
+          const alphanumError = document.getElementById("alphanumError");
+          const lengthError = document.getElementById("lengthError");
+          const passwordError = document.getElementById("passwordError");
+          const successMessage = document.getElementById("successMessage");
+
+          // 初期化
+          let isValid = true;
+          emailError.style.display = "none";
+          urlError.style.display = "none";
+          numberError.style.display = "none";
+          phoneError.style.display = "none";
+          ipError.style.display = "none";
+          dateError.style.display = "none";
+          alphaError.style.display = "none";
+          alphanumError.style.display = "none";
+          lengthError.style.display = "none";
+          passwordError.style.display = "none";
+          successMessage.style.display = "none";
+
+          // メールアドレスの検証
+          if (!validator.isEmail(email)) {
+            emailError.style.display = "block";
+            isValid = false;
+          }
+
+          // URLの検証
+          if (!validator.isURL(url)) {
+            urlError.style.display = "block";
+            isValid = false;
+          }
+
+          // 数値の検証
+          if (!validator.isNumeric(number)) {
+            numberError.style.display = "block";
+            isValid = false;
+          }
+
+          // 電話番号の検証
+          if (!validator.isMobilePhone(phone, "ja-JP")) {
+            phoneError.style.display = "block";
+            isValid = false;
+          }
+
+          // IPアドレスの検証
+          if (!validator.isIP(ip)) {
+            ipError.style.display = "block";
+            isValid = false;
+          }
+
+          // 日付の検証
+          if (!validator.isDate(date)) {
+            dateError.style.display = "block";
+            isValid = false;
+          }
+
+          // アルファベットのみの検証
+          if (!validator.isAlpha(alpha, "en-US")) {
+            alphaError.style.display = "block";
+            isValid = false;
+          }
+
+          // 英数字のみの検証
+          if (!validator.isAlphanumeric(alphanum, "en-US")) {
+            alphanumError.style.display = "block";
+            isValid = false;
+          }
+
+          // 文字数の検証（5～10文字）
+          if (!validator.isLength(length, { min: 5, max: 10 })) {
+            lengthError.style.display = "block";
+            isValid = false;
+          }
+
+          // パスワードの一致検証
+          if (!validator.equals(password, confirmPassword)) {
+            passwordError.style.display = "block";
+            isValid = false;
+          }
+
+          // 検証結果に応じて処理を分岐
+          if (isValid) {
+            successMessage.style.display = "block";
+            // フォームを送信する
+            // `this` はフォーム要素を指す
+            this.submit();
+          } else {
+            // 検証に失敗した場合、フォームの送信を防ぐ
+            event.preventDefault();
+          }
+        });
+    </script>
+  </body>
+</html>
